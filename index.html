@@ -7,42 +7,122 @@
             font-family: Arial, Helvetica, sans-serif
         }
 
+        #container {
+            width: 800px;
+            margin: 0 auto;
+            /* border: 1px solid black; */
+            padding: 16px;
+        }
+
         table {
+            width: 100%;
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
+            text-align: left;
             padding: 8px 16px;
         }
 
-        tr.none {
-            color: gray;
+        tr:nth-child(even) {
+            background-color: #f0f4f8;
         }
 
-        tr.green {
-            color: green;
+        tr:nth-child(odd) {
+            background-color: #9bb7d0;
         }
 
-        tr.yellow {
-            color: yellow;
+        p {
+            line-height: 1.2em;
         }
 
-        tr.red {
-            color: red;
+        .slidecontainer {
+            width: 100%;
+            /* Width of the outside container */
+        }
+
+        /* The slider itself */
+        .slider {
+            -webkit-appearance: none;
+            /* Override default CSS styles */
+            appearance: none;
+            width: 100%;
+            /* Full-width */
+            height: 25px;
+            /* Specified height */
+            background: #d3d3d3;
+            /* Grey background */
+            outline: none;
+            /* Remove outline */
+            opacity: 0.7;
+            /* Set transparency (for mouse-over effects on hover) */
+            -webkit-transition: .2s;
+            /* 0.2 seconds transition on hover */
+            transition: opacity .2s;
+        }
+
+        /* Mouse-over effects */
+        .slider:hover {
+            opacity: 1;
+            /* Fully shown on mouse-over */
+        }
+
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            /* Override default look */
+            appearance: none;
+            width: 25px;
+            /* Set a specific slider handle width */
+            height: 25px;
+            /* Slider handle height */
+            background: #9bb7d0;
+            /* Green background */
+            cursor: pointer;
+            /* Cursor on hover */
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            /* Set a specific slider handle width */
+            height: 25px;
+            /* Slider handle height */
+            background: #9bb7d0;
+            /* Green background */
+            cursor: pointer;
+            /* Cursor on hover */
+        }
+
+        code {
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
-    <table>
-        <thead>
+    <div id="container">
+        <h1>WoW Classic Attack Table</h1>
+        <p>
+            All melee attacks are governed by the attack table. Each value in the table is <b>absolute</b>,
+            a 10% chance to block means that <b>all</b> attacks have a 10% chance to be blocked, not just ones that hit,
+            aren't dodged, etc.
+            The server rolls a value between 0 and 99.99 and will select the corrosponding attack on the table.
+        </p>
+        <p>Each point in defense increases your chance to be missed, dodge, block, or parry an enemies attack by
+            <code>0.04%</code>.
+            Each point also decreases the chance you are crit by <code>0.04%</code>.</p>
+        <p>A level 63 mob has a <code>5.60%</code> chance to crit you so at 440 (+140) defense their chance to crit you
+            drops to <code>0.00%</code>.</p>
+        <p>High enough defense or spells such as <code>Shield Block</code> can "push" lower priority attack types off
+            the table.</p>
+        <table>
             <tr>
                 <th>Attack</th>
                 <th>Percent</th>
-                <th>Roll</th>
+                <th>Roll Range</th>
             </tr>
-        </thead>
-        <tbody>
+
             <tr class="none">
                 <td>Miss</td>
                 <td id="missElem"></td>
@@ -78,16 +158,26 @@
                 <td id="hitElem"></td>
                 <td id="hitRoll"></td>
             </tr>
-        </tbody>
-    </table>
-    <div>
-        <div>Modifiers</div>
+        </table>
+        <div style="padding-top: 16px" class="slidecontainer">
+            <label>Defense</label>
+            <input type="range" min="300" max="500" value="300" class="slider" id="myRange">
+        </div>
+        <div style="padding-top: 16px">
+            <input id="defenseInput" type="number" value=300></input>
+        </div>
+        <div style="padding-top: 16px">
+            <input id="shieldBlockInput" type="checkbox"><label>Shield Block (+75% Block)</label></input>
+        </div>
+        <h3>Notes</h3>
         <ul>
-            <li>+5% Parry</li>
-            <li>+5% Block</li>
+            <li>This table is an example of a level 63 mob attacking a player.</li>
+            <li>This table is assuming <code>10.00%</code> dodge/block/parry chance with the standard <code>5.00%</code>
+                miss
+                chance.</li>
+            <li>This table doesn't have crushing blow.</li>
         </ul>
     </div>
-    <input id="defenseSlider" onchange="changeDefense()" type="number" value=300></input>
     <script src="attack.js"></script>
 </body>
 

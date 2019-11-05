@@ -1,3 +1,14 @@
+const options = {
+    shieldBlock: [false, shieldBlockInput]
+}
+
+Object.keys(options).forEach(key => {
+    options[key][1].oninput = () => {
+        options[key][0] = options[key][1].checked;
+        updateTable();
+    }
+});
+
 function roll() {
     return Math.floor(Math.random() * 10000) / 100;
 }
@@ -9,17 +20,21 @@ function defenseBonus() {
 }
 
 function miss() {
-    let c = 0;
+    let c = 500;
     return Math.max(0, c + defenseBonus());
 }
 
 function dodge() {
-    let c = 500;
+    let c = 1000;
     return Math.max(0, c + defenseBonus());
 }
 
 function block() {
     let c = 1000;
+    if (options["shieldBlock"][0]) {
+        c = 7500;
+    }
+
     return Math.max(0, c + defenseBonus());
 }
 
@@ -29,7 +44,7 @@ function parry() {
 }
 
 function crit() {
-    let c = 2500;
+    let c = 560;
     return Math.max(0, c - defenseBonus());
 }
 
@@ -51,20 +66,41 @@ const attackTable = [
     [hit, hitElem, hitRoll]
 ];
 
+function calculateRoll(rollCurrent, percent) {
+    const start = Math.min((rollCurrent / 100).toFixed(2), 99.99);
+    const end = Math.min(((rollCurrent + percent - 1) / 100).toFixed(2), 99.99);
+
+    if (start >= end || start > 99.99) return "Can't be rolled.";
+
+    return start + " to " + end;
+}
+
 function updateTable() {
 
     let rollCurrent = 0;
     attackTable.forEach(t => {
-        t[1].innerText = (t[0]() / 100).toFixed(2);
-        t[2].innerText = (rollCurrent / 100).toFixed(2) + " to " + ((rollCurrent + t[0]() - 1) / 100).toFixed(2);
+        t[1].innerText = (t[0]() / 100).toFixed(2) + "%";
+        // const rollBounds = ;
+        t[2].innerText = calculateRoll(rollCurrent, t[0]());
         rollCurrent += t[0]();
     });
-
-
 }
 
 function changeDefense(e) {
     defense = defenseSlider.value;
+    updateTable();
+}
+
+myRange.oninput = function () {
+    defenseInput.value = this.value;
+    defense = this.value;
+    updateTable();
+}
+
+defenseInput.oninput = function () {
+    myRange.value = this.value;
+    defenseInput.value = this.value;
+    defense = this.value;
     updateTable();
 }
 
