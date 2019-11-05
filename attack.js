@@ -33,6 +33,10 @@ function crit() {
     return Math.max(0, c - defenseBonus());
 }
 
+function crushing() {
+    return 1500;
+}
+
 function hit() {
     return Math.max(0, 10000 - (miss() + dodge() + block() + parry() + crit()));
 }
@@ -43,6 +47,7 @@ const attackTable = [
     [block, blockElem, blockRoll],
     [parry, parryElem, parryRoll],
     [crit, critElem, critRoll],
+    [crushing, crushingElem, crushingRoll],
     [hit, hitElem, hitRoll]
 ];
 
