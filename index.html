@@ -7,6 +7,19 @@
             font-family: Arial, Helvetica, sans-serif
         }
 
+        #logo {
+            width: 64px;
+            height: 64px;
+            vertical-align: middle;
+        }
+
+        h1 {
+            display: inline;
+            vertical-align: middle;
+            margin: 0;
+            margin-left: 16px;
+        }
+
         #container {
             width: 800px;
             margin: 0 auto;
@@ -102,16 +115,21 @@
 
 <body>
     <div id="container">
-        <h1>WoW Classic Attack Table</h1>
+        <div>
+            <img id="logo" src="wow.png">
+            <h1> WoW Classic Attack Table</h1>
+        </div>
         <p>
             All melee attacks are governed by the attack table. Each value in the table is <b>absolute</b>,
             a 10% chance to block means that <b>all</b> attacks have a 10% chance to be blocked, not just ones that hit,
             aren't dodged, etc.
-            The server rolls a value between 0 and 99.99 and will select the corrosponding attack on the table.
+            The server rolls a value between 1 and 100.00 and will select the corrosponding attack on the table.
         </p>
         <p>Each point in defense increases your chance to be missed, dodge, block, or parry an enemies attack by
             <code>0.04%</code>.
-            Each point also decreases the chance you are crit by <code>0.04%</code>.</p>
+            Each point also decreases the chance you are crit by <code>0.04%</code>.
+            This makes every ~8 points of defense ~1% avoidance.
+        </p>
         <p>A level 63 mob has a <code>5.60%</code> chance to crit you so at 440 (+140) defense their chance to crit you
             drops to <code>0.00%</code>.</p>
         <p>High enough defense or spells such as <code>Shield Block</code> can "push" lower priority attack types off
@@ -159,6 +177,9 @@
                 <td id="hitRoll"></td>
             </tr>
         </table>
+        <div style="padding-top: 16px">
+
+        </div>
         <div style="padding-top: 16px" class="slidecontainer">
             <label>Defense</label>
             <input type="range" min="300" max="500" value="300" class="slider" id="myRange">

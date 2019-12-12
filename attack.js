@@ -67,10 +67,10 @@ const attackTable = [
 ];
 
 function calculateRoll(rollCurrent, percent) {
-    const start = Math.min((rollCurrent / 100).toFixed(2), 99.99);
-    const end = Math.min(((rollCurrent + percent - 1) / 100).toFixed(2), 99.99);
+    const start = Math.min((rollCurrent / 100).toFixed(2), 100.00);
+    const end = Math.min(((rollCurrent + percent - 1) / 100).toFixed(2), 100.00);
 
-    if (start >= end || start > 99.99) return "Can't be rolled.";
+    if (start >= end || start > 100.00) return "Can't be rolled.";
 
     return start + " to " + end;
 }
