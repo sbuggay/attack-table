@@ -25,21 +25,21 @@ function miss() {
 }
 
 function dodge() {
-    let c = 1000;
+    let c = 500;
     return Math.max(0, c + defenseBonus());
 }
 
 function block() {
-    let c = 1000;
+    let c = 500;
     if (options["shieldBlock"][0]) {
-        c = 7500;
+        c += 7500;
     }
 
     return Math.max(0, c + defenseBonus());
 }
 
 function parry() {
-    let c = 1000;
+    let c = 500;
     return Math.max(0, c + defenseBonus());
 }
 
@@ -53,7 +53,7 @@ function crushing() {
 }
 
 function hit() {
-    return Math.max(0, 10000 - (miss() + dodge() + block() + parry() + crit()));
+    return Math.max(0, 10000 - (miss() + dodge() + block() + parry() + crit() + crushing()));
 }
 
 const attackTable = [
@@ -77,13 +77,15 @@ function calculateRoll(rollCurrent, percent) {
 
 function updateTable() {
 
-    let rollCurrent = 0;
+    let rollCurrent = 1;
     attackTable.forEach(t => {
         t[1].innerText = (t[0]() / 100).toFixed(2) + "%";
         // const rollBounds = ;
         t[2].innerText = calculateRoll(rollCurrent, t[0]());
         rollCurrent += t[0]();
     });
+
+    // hitTotal.innerText = ;
 }
 
 function changeDefense(e) {
