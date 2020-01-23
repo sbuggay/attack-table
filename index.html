@@ -110,30 +110,38 @@
         code {
             font-weight: bold;
         }
+
+        .baseStat {
+            padding: 8px;
+            background-color: #9bb7d0;
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 
 <body>
     <div id="container">
-        <div>
+        <div style="padding-bottom: 16px;">
             <img id="logo" src="wow.png">
             <h1> WoW Classic Attack Table</h1>
         </div>
-        <p>
-            All melee attacks are governed by the attack table. Each value in the table is <b>absolute</b>,
-            a 10% chance to block means that <b>all</b> attacks have a 10% chance to be blocked, not just ones that hit,
-            aren't dodged, etc.<sup><a href="https://vanilla-wow.fandom.com/wiki/Attack_table">[2]</a></sup>
-            The server rolls a value between 1.00 and 100.00 and will select the corrosponding attack on the table.
-        </p>
-        <p>Each point in defense increases your chance to be missed, dodge, block, or parry an enemies attack by
-            <code>0.04%</code>.
-            Each point also decreases the chance you are crit by <code>0.04%</code>.
-            This makes every ~8 points of defense ~1% avoidance.
-        </p>
-        <p>A level 63 mob has a <code>5.60%</code> chance to crit you so at 440 (+140) defense their chance to crit you
-            drops to <code>0.00%</code>.</p>
-        <p>High enough defense or spells such as <code>Shield Block</code> can "push" lower priority attack types off
-            the table.</p>
+        <div style="padding-bottom: 16px; display: flex; justify-content: space-between">
+            <div class="baseStat">
+                <img style="width: 32px; height: 32px; padding-right: 16px;" src="https://wow.zamimg.com/images/wow/icons/large/spell_nature_invisibilty.jpg"></img>
+                <input id="dodgeInput" type="number" value="5.00"></input>
+            </div>
+            <div class="baseStat">
+                <img style="width: 32px; height: 32px; padding-right: 16px;" src="https://wow.zamimg.com/images/wow/icons/large/ability_parry.jpg"></img>
+                <input id="parryInput" type="number" value="5.00"></input>
+            </div>
+            <div class="baseStat">
+                <img style="width: 32px; height: 32px; padding-right: 16px;" src="https://wow.zamimg.com/images/wow/icons/large/ability_defend.jpg"></img>
+                <input id="blockInput" type="number" value="5.00"></input>
+            </div>
+            
+            
+        </div>
         <table>
             <tr>
                 <th>Attack</th>
@@ -152,14 +160,14 @@
                 <td id="dodgeRoll"></td>
             </tr>
             <tr class="green">
-                <td>Block</td>
-                <td id="blockElem"></td>
-                <td id="blockRoll"></td>
-            </tr>
-            <tr class="green">
                 <td>Parry</td>
                 <td id="parryElem"></td>
                 <td id="parryRoll"></td>
+            </tr>
+            <tr class="green">
+                <td>Block</td>
+                <td id="blockElem"></td>
+                <td id="blockRoll"></td>
             </tr>
             <tr class="red">
                 <td>Crit</td>
@@ -192,10 +200,30 @@
         <div style="padding-top: 16px">
             <input id="shieldBlockInput" type="checkbox"><label>Shield Block (+75% Block)</label></input>
         </div>
+        <h3>Notes</h3>
+        <p>
+            All melee attacks are governed by the attack table. Each value in the table is <b>absolute</b>,
+            a 10% chance to block means that <b>all</b> attacks have a 10% chance to be blocked, not just ones that hit,
+            aren't dodged, etc.<sup><a href="https://vanilla-wow.fandom.com/wiki/Attack_table">[2]</a></sup>
+            The server rolls a value between 1.00 and 100.00 and will select the corrosponding attack on the table.
+        </p>
+        <p>Each point in defense increases your chance to be missed, dodge, block, or parry an enemies attack by
+            <code>0.04%</code>.
+            Each point also decreases the chance you are crit by <code>0.04%</code>.
+            This makes every ~8 points of defense ~1% avoidance.
+        </p>
+        <p>A level 63 mob has a <code>5.60%</code> chance to crit you so at 440 (+140) defense their chance to crit you
+            drops to <code>0.00%</code>.</p>
+        <p>High enough defense or spells such as <code>Shield Block</code> can "push" lower priority attack types off
+            the table.</p>
+
         <h3>Reference</h3>
         <ul>
-            <li>[1] <a href=https://github.com/magey/classic-warrior/wiki/Attack-table">https://github.com/magey/classic-warrior/wiki/Attack-table</a></li>
-            <li>[2] <a href="https://vanilla-wow.fandom.com/wiki/Attack_table">https://vanilla-wow.fandom.com/wiki/Attack_table</a></li>
+            <li>[1] <a
+                    href=https://github.com/magey/classic-warrior/wiki/Attack-table">https://github.com/magey/classic-warrior/wiki/Attack-table
+                    </a> </li> <li>[2] <a
+                        href="https://vanilla-wow.fandom.com/wiki/Attack_table">https://vanilla-wow.fandom.com/wiki/Attack_table</a>
+            </li>
         </ul>
     </div>
     <script src="attack.js"></script>

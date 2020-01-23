@@ -14,6 +14,9 @@ function roll() {
 }
 
 let defense = 300;
+let baseDodge = 5;
+let baseBlock = 5;
+let baseParry = 5;
 
 function defenseBonus() {
     return (defense - 300) * 4;
@@ -25,12 +28,12 @@ function miss() {
 }
 
 function dodge() {
-    let c = 500;
+    let c = baseDodge * 100;
     return Math.max(0, c + defenseBonus());
 }
 
 function block() {
-    let c = 500;
+    let c = baseBlock * 100;
     if (options["shieldBlock"][0]) {
         c += 7500;
     }
@@ -39,7 +42,7 @@ function block() {
 }
 
 function parry() {
-    let c = 500;
+    let c = baseParry * 100;
     return Math.max(0, c + defenseBonus());
 }
 
@@ -59,8 +62,8 @@ function hit() {
 const attackTable = [
     [miss, missElem, missRoll],
     [dodge, dodgeElem, dodgeRoll],
-    [block, blockElem, blockRoll],
     [parry, parryElem, parryRoll],
+    [block, blockElem, blockRoll],
     [crit, critElem, critRoll],
     [crushing, crushingElem, crushingRoll],
     [hit, hitElem, hitRoll]
@@ -70,18 +73,21 @@ function calculateRoll(rollCurrent, percent) {
     const start = Math.min((rollCurrent / 100).toFixed(2), 100.00);
     const end = Math.min(((rollCurrent + percent - 1) / 100).toFixed(2), 100.00);
 
-    if (start >= end || start > 100.00) return "Can't be rolled.";
+    if (start >= end || start > 100.00) return false;
 
-    return start + " to " + end;
+    return [start, end];
 }
 
 function updateTable() {
 
     let rollCurrent = 1;
     attackTable.forEach(t => {
-        t[1].innerText = (t[0]() / 100).toFixed(2) + "%";
+        const roll = calculateRoll(rollCurrent, t[0]());
+        const fixed = (t[0]() / 100);
+
+        t[1].innerText = fixed.toFixed(2) + "%";
         // const rollBounds = ;
-        t[2].innerText = calculateRoll(rollCurrent, t[0]());
+        t[2].innerText = roll ? roll[0] + " to " + roll[1] : "Can't be rolled";
         rollCurrent += t[0]();
     });
 
@@ -103,6 +109,21 @@ defenseInput.oninput = function () {
     myRange.value = this.value;
     defenseInput.value = this.value;
     defense = this.value;
+    updateTable();
+}
+
+dodgeInput.oninput = function () {
+    baseDodge = this.value;
+    updateTable();
+}
+
+parryInput.oninput = function () {
+    baseParry = this.value;
+    updateTable();
+}
+
+blockInput.oninput = function () {
+    baseBlock = this.value;
     updateTable();
 }
 
