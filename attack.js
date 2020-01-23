@@ -1,10 +1,13 @@
 const options = {
-    shieldBlock: [false, shieldBlockInput]
+    attackTypeEVP: [true, "switchType"],
+    shieldBlock: [false, "shieldBlockInput"]
 }
 
 Object.keys(options).forEach(key => {
-    options[key][1].oninput = () => {
-        options[key][0] = options[key][1].checked;
+    const element = document.getElementById(options[key][1])
+    if (!element) return;
+    element.oninput = () => {
+        options[key][0] = !options[key][0];
         updateTable();
     }
 });
@@ -55,11 +58,25 @@ function crushing() {
     return 1500;
 }
 
+function glancing() {
+    return 4000;
+}
+
 function hit() {
     return Math.max(0, 10000 - (miss() + dodge() + block() + parry() + crit() + crushing()));
 }
 
-const attackTable = [
+const attackTablePVE = [
+    [miss, missElem, missRoll],
+    [dodge, dodgeElem, dodgeRoll],
+    [parry, parryElem, parryRoll],
+    [glancing, glancingElem, glancingRoll],
+    [block, blockElem, blockRoll],
+    [crit, critElem, critRoll],
+    [hit, hitElem, hitRoll]
+];
+
+const attackTableEVP = [
     [miss, missElem, missRoll],
     [dodge, dodgeElem, dodgeRoll],
     [parry, parryElem, parryRoll],
@@ -69,25 +86,51 @@ const attackTable = [
     [hit, hitElem, hitRoll]
 ];
 
+
 function calculateRoll(rollCurrent, percent) {
     const start = Math.min((rollCurrent / 100).toFixed(2), 100.00);
     const end = Math.min(((rollCurrent + percent - 1) / 100).toFixed(2), 100.00);
-
-    if (start >= end || start > 100.00) return false;
-
+    if (start >= end || start > 100.00) return 0;
     return [start, end];
 }
 
 function updateTable() {
 
+    // Hide and show glancing or crushing depending on table type
+    selectedAttackTable = options.attackTypeEVP[0] ? attackTableEVP : attackTablePVE;
+
+    crushingRow.style = "display: none;";
+    glancingRow.style = "display: none;";
+    EVPControls.style = "display: none;";
+    PVEControls.style = "display: none;";
+
+    if (options.attackTypeEVP[0] === true) {
+        baseDodge = 5;
+        baseParry = 5;
+        baseBlock = 5;
+        defense = 300;
+        crushingRow.style = "";
+        EVPControls.style = "";
+        
+    }
+    else {
+        baseDodge = 6.5;
+        baseParry = 14.00;
+        baseBlock = 0;
+        defense = 300;
+        glancingRow.style = "";
+        PVEControls.style = "";
+    }
+
     let rollCurrent = 1;
-    attackTable.forEach(t => {
+    selectedAttackTable.forEach(t => {
         const roll = calculateRoll(rollCurrent, t[0]());
         const fixed = (t[0]() / 100);
-
-        t[1].innerText = fixed.toFixed(2) + "%";
+        const realRoll = roll ?  (roll[1] - roll[0] + 0.01).toFixed(2) : "0.00";
+        const realRollText = `${fixed.toFixed(2) !== realRoll ? "(" + realRoll + "%)" : ""}`;
+        t[1].innerText = `${fixed.toFixed(2)}% ${realRollText}`;
         // const rollBounds = ;
-        t[2].innerText = roll ? roll[0] + " to " + roll[1] : "Can't be rolled";
+        t[2].innerText = roll ? `${roll[0]} to ${roll[1]}` : "Can't be rolled";
         rollCurrent += t[0]();
     });
 

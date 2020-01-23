@@ -38,12 +38,24 @@
             padding: 8px 16px;
         }
 
-        tr:nth-child(even) {
+        /* tr:nth-child(even) {
             background-color: #f0f4f8;
         }
 
         tr:nth-child(odd) {
             background-color: #9bb7d0;
+        } */
+
+        tr.green {
+            background-color: #a5c7b0;
+        }
+
+        tr.yellow {
+            background-color: #e1d989;
+        }
+
+        tr.red {
+            background-color: #d498a6;
         }
 
         p {
@@ -126,22 +138,11 @@
             <img id="logo" src="wow.png">
             <h1> WoW Classic Attack Table</h1>
         </div>
-        <div style="padding-bottom: 16px; display: flex; justify-content: space-between">
-            <div class="baseStat">
-                <img style="width: 32px; height: 32px; padding-right: 16px;" src="https://wow.zamimg.com/images/wow/icons/large/spell_nature_invisibilty.jpg"></img>
-                <input id="dodgeInput" type="number" value="5.00"></input>
-            </div>
-            <div class="baseStat">
-                <img style="width: 32px; height: 32px; padding-right: 16px;" src="https://wow.zamimg.com/images/wow/icons/large/ability_parry.jpg"></img>
-                <input id="parryInput" type="number" value="5.00"></input>
-            </div>
-            <div class="baseStat">
-                <img style="width: 32px; height: 32px; padding-right: 16px;" src="https://wow.zamimg.com/images/wow/icons/large/ability_defend.jpg"></img>
-                <input id="blockInput" type="number" value="5.00"></input>
-            </div>
-            
-            
+        <div>
+            <input id="switchType" type="checkbox" value=true><label>EVP</label></input>
+
         </div>
+
         <table>
             <tr>
                 <th>Attack</th>
@@ -149,7 +150,7 @@
                 <th>Roll Range</th>
             </tr>
 
-            <tr class="none">
+            <tr class="green">
                 <td>Miss</td>
                 <td id="missElem"></td>
                 <td id="missRoll"></td>
@@ -164,7 +165,12 @@
                 <td id="parryElem"></td>
                 <td id="parryRoll"></td>
             </tr>
-            <tr class="green">
+            <tr class="red" id="glancingRow">
+                <td>Glancing Blow</td>
+                <td id="glancingElem"></td>
+                <td id="glancingRoll"></td>
+            </tr>
+            <tr class="yellow">
                 <td>Block</td>
                 <td id="blockElem"></td>
                 <td id="blockRoll"></td>
@@ -174,7 +180,7 @@
                 <td id="critElem"></td>
                 <td id="critRoll"></td>
             </tr>
-            <tr class="red">
+            <tr class="red" id="crushingRow">
                 <td>Crushing Blow</td>
                 <td id="crushingElem"></td>
                 <td id="crushingRoll"></td>
@@ -190,16 +196,39 @@
 
             </div>
         </div>
-        <div style="padding-top: 16px" class="slidecontainer">
-            <label>Defense</label>
-            <input type="range" min="300" max="500" value="300" class="slider" id="myRange">
+        <div style="display: none;" id="EVPControls">
+            <div style="display: flex; justify-content: space-between">
+                <div class="baseStat">
+                    <img style="width: 32px; height: 32px; padding-right: 16px;"
+                        src="https://wow.zamimg.com/images/wow/icons/large/spell_nature_invisibilty.jpg"></img>
+                    <input id="dodgeInput" type="number" value="5.00"></input>
+                </div>
+                <div class="baseStat">
+                    <img style="width: 32px; height: 32px; padding-right: 16px;"
+                        src="https://wow.zamimg.com/images/wow/icons/large/ability_parry.jpg"></img>
+                    <input id="parryInput" type="number" value="5.00"></input>
+                </div>
+                <div class="baseStat">
+                    <img style="width: 32px; height: 32px; padding-right: 16px;"
+                        src="https://wow.zamimg.com/images/wow/icons/large/ability_defend.jpg"></img>
+                    <input id="blockInput" type="number" value="5.00"></input>
+                </div>
+            </div>
+            <div style="padding-top: 16px" class="slidecontainer">
+                <label>Defense</label>
+                <input type="range" min="300" max="500" value="300" class="slider" id="myRange">
+            </div>
+            <div style="padding-top: 16px">
+                <input id="defenseInput" type="number" value=300></input>
+            </div>
+            <div style="padding-top: 16px">
+                <input id="shieldBlockInput" type="checkbox"><label>Shield Block (+75% Block)</label></input>
+            </div>
         </div>
-        <div style="padding-top: 16px">
-            <input id="defenseInput" type="number" value=300></input>
+        <div style="display: none;" id="PVEControls">
+
         </div>
-        <div style="padding-top: 16px">
-            <input id="shieldBlockInput" type="checkbox"><label>Shield Block (+75% Block)</label></input>
-        </div>
+
         <h3>Notes</h3>
         <p>
             All melee attacks are governed by the attack table. Each value in the table is <b>absolute</b>,
