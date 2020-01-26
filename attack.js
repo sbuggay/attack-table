@@ -1,6 +1,34 @@
 const options = {
-    attackTypeEVP: [true, "switchType"],
+    attackTypeEVP: [true, "switchType", updateTableType],
     shieldBlock: [false, "shieldBlockInput"]
+}
+
+function updateTableType() {
+    // Hide and show glancing or crushing depending on table type
+    selectedAttackTable = options.attackTypeEVP[0] ? attackTableEVP : attackTablePVE;
+
+    crushingRow.style = "display: none;";
+    glancingRow.style = "display: none;";
+    EVPControls.style = "display: none;";
+    PVEControls.style = "display: none;";
+
+    if (options.attackTypeEVP[0] === true) {
+        baseDodge = 5;
+        baseParry = 5;
+        baseBlock = 5;
+        defense = 300;
+        crushingRow.style = "";
+        EVPControls.style = "";
+
+    }
+    else {
+        baseDodge = 6.5;
+        baseParry = 14.00;
+        baseBlock = 0;
+        defense = 300;
+        glancingRow.style = "";
+        PVEControls.style = "";
+    }
 }
 
 Object.keys(options).forEach(key => {
@@ -8,6 +36,11 @@ Object.keys(options).forEach(key => {
     if (!element) return;
     element.oninput = () => {
         options[key][0] = !options[key][0];
+
+        // If there is a callback, invoke it.
+        if (options[key][2]) {
+            options[key][2]();
+        }
         updateTable();
     }
 });
@@ -99,34 +132,11 @@ function updateTable() {
     // Hide and show glancing or crushing depending on table type
     selectedAttackTable = options.attackTypeEVP[0] ? attackTableEVP : attackTablePVE;
 
-    crushingRow.style = "display: none;";
-    glancingRow.style = "display: none;";
-    EVPControls.style = "display: none;";
-    PVEControls.style = "display: none;";
-
-    if (options.attackTypeEVP[0] === true) {
-        baseDodge = 5;
-        baseParry = 5;
-        baseBlock = 5;
-        defense = 300;
-        crushingRow.style = "";
-        EVPControls.style = "";
-        
-    }
-    else {
-        baseDodge = 6.5;
-        baseParry = 14.00;
-        baseBlock = 0;
-        defense = 300;
-        glancingRow.style = "";
-        PVEControls.style = "";
-    }
-
     let rollCurrent = 1;
     selectedAttackTable.forEach(t => {
         const roll = calculateRoll(rollCurrent, t[0]());
         const fixed = (t[0]() / 100);
-        const realRoll = roll ?  (roll[1] - roll[0] + 0.01).toFixed(2) : "0.00";
+        const realRoll = roll ? (roll[1] - roll[0] + 0.01).toFixed(2) : "0.00";
         const realRollText = `${fixed.toFixed(2) !== realRoll ? "(" + realRoll + "%)" : ""}`;
         t[1].innerText = `${fixed.toFixed(2)}% ${realRollText}`;
         // const rollBounds = ;
@@ -171,3 +181,4 @@ blockInput.oninput = function () {
 }
 
 updateTable();
+updateTableType();
